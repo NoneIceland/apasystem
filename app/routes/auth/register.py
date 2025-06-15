@@ -14,9 +14,15 @@ def register():
         if existing_user:
             flash('该用户名已被选择，请选择其他用户名', 'danger')
             return render_template('auth/register.html', form=form)
+
+        existing_nick = User.query.filter_by(nickname=form.nickname.data).first()
+        if existing_nick:
+            flash('该昵称已被选择，请选择其他昵称', 'danger')
+            return render_template('auth/register.html', form=form)
         
         new_user = User(
             username=form.username.data,
+            nickname=form.nickname.data,
             password=form.password.data,
             role='user'
         )

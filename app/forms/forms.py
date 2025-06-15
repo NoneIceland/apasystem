@@ -34,6 +34,10 @@ class RegistrationForm(FlaskForm):
         DataRequired(message='用户名不能为空'),
         Length(min=3, max=64, message='用户名应在3-64个字符之间')
     ])
+    nickname = StringField('昵称', validators=[
+        DataRequired(),
+        Length(min=3, max=64, message='昵称应在3-64个字符之间')
+    ])
     password = PasswordField('密码', validators=[
         DataRequired(message='密码不能为空'),
         Length(min=6, max=64, message='用密码应在6-64个字符之间')

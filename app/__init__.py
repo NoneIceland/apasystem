@@ -1,18 +1,19 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from app.config import config
 from app.const import bp_list
 from sqlalchemy import text
-from app.extensions import db
 
 user_login_manager = LoginManager()
 admin_login_manager = LoginManager()
 
 def create_app(config_name='default'):
     ''' Factory function to create the Flask app '''
-    app = Flask(__name__)    
+    app = Flask(__name__)
+    from app.extensions import db
+    migrate = Migrate(app, db)
     
     '''load config'''
     app.config.from_object(config[config_name])
