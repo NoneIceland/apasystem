@@ -6,6 +6,7 @@ load_dotenv()
 class Config:
     ''' basic config '''
     SECRET_KEY = os.getenv('SECRET_KEY', 'apasystem')
+    WTF_CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     @staticmethod
