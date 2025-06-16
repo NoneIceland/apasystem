@@ -1,13 +1,10 @@
 from flask import Flask
 from flask_migrate import Migrate
-from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
 from app.config import config
 from app.const import bp_list
 from sqlalchemy import text
+from app.extensions import *
 
-user_login_manager = LoginManager()
-admin_login_manager = LoginManager()
 
 def create_app(config_name='default'):
     ''' Factory function to create the Flask app '''
@@ -18,8 +15,7 @@ def create_app(config_name='default'):
     '''load config'''
     app.config.from_object(config[config_name])
     
-    '''init Flask-Login'''
-    
+    '''init Flask_login'''
     @user_login_manager.user_loader
     def load_user(user_id):
         from app.models import User
@@ -36,15 +32,16 @@ def create_app(config_name='default'):
             return admin
         return None
     
+    '''init flask config'''
+    db.init_app(app)
+    mail.init_app(app)
     user_login_manager.init_app(app)
     admin_login_manager.init_app(app)
-    
-    '''init CSRFProtect'''
-    csrf = CSRFProtect()
     csrf.init_app(app)
+    migrate.init_app(app, db)
+    redis_client.init_app(app)
     
     '''load mysql'''
-    db.init_app(app)
     with app.app_context():
         db.create_all()
 
@@ -57,12 +54,28 @@ def create_app(config_name='default'):
         
         
     '''mysql health check'''
-    @app.route('/healthcheck')
-    def db_healthcheck():
+    @app.route('/test/mysql')
+    def test_mysql():
         try:
             db.session.execute(text('SELECT 1'))
             return 'OK'
         except Exception as e:
             return f'Error: {str(e)}'
+    
+    '''redis health check'''
+    @app.route('/test/redis')
+    def test_redis():
+        try:
+            return "OK"
+        except Exception as e:
+            return f"Error: {str(e)}"
+    
+    '''mail health check'''
+    @app.route('/test/mail')
+    def test_mail():
+        from flask_mail import Message
+        message = Message(subject='邮箱测试', recipients=["none3548393247@163.com"], body='这是一条测试邮件')
+        mail.send(message)
+        return 'mail test successfully!'
     
     return app

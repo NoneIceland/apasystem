@@ -28,8 +28,13 @@ class AdminLoginForm(FlaskForm):
         Length(min=4, max=6)
     ])
     remember_me = BooleanField('记住我')
-    
+
+
 class RegistrationForm(FlaskForm):
+    verification_code = StringField('验证码', validators=[
+        DataRequired(message='验证码不能为空'),
+        Length(min=6, max=6, message='验证码应为6位数字')
+    ])
     username = StringField('用户名', validators=[
         DataRequired(message='用户名不能为空'),
         Length(min=3, max=64, message='用户名应在3-64个字符之间')

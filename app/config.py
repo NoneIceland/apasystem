@@ -16,6 +16,7 @@ class Config:
     
 class DevelopmentConfig(Config):
     ''' development config '''
+    WTF_CSRF_ENABLED = False
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}'.format(
         os.getenv('DB_USER', 'root'),
@@ -23,6 +24,20 @@ class DevelopmentConfig(Config):
         os.getenv('DB_HOST', 'localhost'),
         os.getenv('DB_NAME', 'apa_system')
     )
+    
+    REDIS_HOST = "localhost"
+    REDIS_PORT = 6379
+    REDIS_PASSWORD = None
+    REDIS_DB = 0
+    REDIS_URL = 'redis://localhost:6379/0'
+    
+    MAIL_SERVER = "smtp.163.com"
+    MAIL_USE_SSL = True
+    MAIL_PORT = 465
+    MAIL_USERNAME = "icemail2025@163.com"
+    MAIL_PASSWORD = "LUeRm648ntRVmQ6g"
+    MAIL_DEFAULT_SENDER = "icemail2025@163.com"
+    INTERNAL_IP = "localhost"
     
 class ProductionConfig(Config):
     ''' production config '''
@@ -32,6 +47,21 @@ class ProductionConfig(Config):
         os.getenv('DB_HOST', 'localhost'),
         os.getenv('DB_NAME', 'apa_system')
     )
+    REDIS_URL = 'redis://localhost:6379/0'
+    REDIS_HOST = "localhost"
+    REDIS_PASSWORD = None
+    REDIS_PORT = 6379
+    REDIS_DB = 0
+    
+    
+    MAIL_SERVER = "smtp.163.com"
+    MAIL_USE_SSL = True
+    MAIL_PORT = 465
+    MAIL_USERNAME = "icemail2025@163.com"
+    MAIL_PASSWORD = "LUeRm648ntRVmQ6g"
+    MAIL_DEFAULT_SENDER = "icemail2025@163.com"
+    INTERNAL_IP = ""
+    
     
 config = {
     'development': DevelopmentConfig,
