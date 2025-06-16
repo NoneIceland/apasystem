@@ -1,27 +1,45 @@
 {% extends "auth/auth_base.html" %}
 
 {% block login_header %}
-    <h2 class="text-center text-xl font-semibold mt-2">用户注册</h2>
-{% endblock %}
-
-{% block email_form %}
-    <form method="POST" action="{{ url_for('register') }}" class='space-y-4'>
-        {{ form.hidden_tag() }}
-    </form>
+    <p class="text-center text-xl font-semibold">用户注册</p>
 {% endblock %}
 
 {% block login_form %}
-    <form method="POST" action="{{ url_for('register.register') }}" class="space-y-4">
+    <form method="POST" action="{{ url_for('register.register') }}" class="space-y-6">
         {{ form.hidden_tag() }}
-
+        
+        <!-- 邮箱输入和验证码发送区域 -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">邮箱</label>
+            <div class="mt-1 flex space-x-2">
+                {{ form.email(
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                    placeholder="请输入您的邮箱"
+                ) }}
+                <button 
+                    type="button" 
+                    id="send-code-btn"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
+                >
+                    发送验证码
+                </button>
+            </div>
+            {% for error in form.email.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
         <!-- 验证码输入 -->
         <div>
             <label for="verification_code" class="block text-sm font-medium text-gray-700">验证码</label>
             <div class="mt-1">
-                {{ form.verification_code(class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm") }}
+                {{ form.verification_code(
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                    placeholder="请输入6位验证码"
+                ) }}
             </div>
             {% for error in form.verification_code.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
             {% endfor %}
         </div>
         
@@ -29,38 +47,33 @@
         <div>
             <label for="username" class="block text-sm font-medium text-gray-700">用户名</label>
             <div class="mt-1">
-                {{ form.username(class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm") }}
+                {{ form.username(
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                    placeholder="3-64个字符"
+                ) }}
             </div>
             {% for error in form.username.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
             {% endfor %}
         </div>
 
-        <!-- 昵称输入 -->
-        <div>
-            <label for="nickname" class="block text-sm font-medium text-gray-700">昵称</label>
-            <div class="mt-1">
-                {{ form.nickname(class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm") }}
-            </div>
-            {% for error in form.nickname.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ error }}</p>
-            {% endfor %}
-        </div>
-        
         <!-- 密码输入 -->
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700">密码</label>
             <div class="mt-1 relative">
-                {{ form.password(class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm") }}
-                <button type="button" class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center">
+                {{ form.password(
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                    placeholder="至少6个字符"
+                ) }}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer password-toggle">
                     <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                </button>
+                </div>
             </div>
             {% for error in form.password.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
             {% endfor %}
         </div>
         
@@ -68,16 +81,19 @@
         <div>
             <label for="confirm_password" class="block text-sm font-medium text-gray-700">确认密码</label>
             <div class="mt-1 relative">
-                {{ form.confirm_password(class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm") }}
-                <button type="button" class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center">
+                {{ form.confirm_password(
+                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                    placeholder="请再次输入密码"
+                ) }}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer password-toggle">
                     <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                </button>
+                </div>
             </div>
             {% for error in form.confirm_password.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
             {% endfor %}
         </div>
         
@@ -94,4 +110,12 @@
         <span>已有账号? </span>
         <a href="{{ url_for('login.user_login') }}" class="font-medium text-blue-600 hover:text-blue-500">登录</a>
     </div>
+{% endblock %}
+
+{% block login_footer %}
+    <p class="mt-4 text-center text-sm text-gray-500">© 2023 社团管理系统 - 用户注册</p>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/auth/register.js') }}"></script>
 {% endblock %}
