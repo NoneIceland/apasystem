@@ -108,7 +108,7 @@
     <!-- 登录链接 -->
     <div class="mt-4 text-center text-sm">
         <span>已有账号? </span>
-        <a href="{{ url_for('login.user_login') }}" class="font-medium text-blue-600 hover:text-blue-500">登录</a>
+        <a href="{{ url_for('login.login') }}" class="font-medium text-blue-600 hover:text-blue-500">登录</a>
     </div>
 {% endblock %}
 
@@ -117,5 +117,6 @@
 {% endblock %}
 
 {% block scripts %}
+    <!-- 密码可见性切换脚本 -->
     <script src="{{ url_for('static', filename='js/auth/register.js') }}"></script>
 {% endblock %}

@@ -7,8 +7,7 @@ from flask_redis import FlaskRedis
 
 db = SQLAlchemy()
 mail = Mail()
-user_login_manager = LoginManager()
-admin_login_manager = LoginManager()
+login_manager = LoginManager()
 csrf = CSRFProtect()
 migrate = Migrate()
 redis_client = FlaskRedis()

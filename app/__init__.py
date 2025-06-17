@@ -16,27 +16,18 @@ def create_app(config_name='default'):
     app.config.from_object(config[config_name])
     
     '''init Flask_login'''
-    @user_login_manager.user_loader
+    @login_manager.user_loader
     def load_user(user_id):
         from app.models import User
-        user = User.query.get(int(user_id))
-        if user:
-            return user
-        return None
+        return User.query.get(int(user_id))
     
-    @admin_login_manager.user_loader
-    def load_admin(admin_id):
-        from app.models import Admin
-        admin = Admin.query.get(int(admin_id))
-        if admin:
-            return admin
-        return None
+    '''set login view'''
+    login_manager.login_view = 'login.login'
     
     '''init flask config'''
     db.init_app(app)
     mail.init_app(app)
-    user_login_manager.init_app(app)
-    admin_login_manager.init_app(app)
+    login_manager.init_app(app)
     csrf.init_app(app)
     migrate.init_app(app, db)
     redis_client.init_app(app)

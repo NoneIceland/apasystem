@@ -42,7 +42,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash('注册成功！您现在可以登录', 'success')
-        return redirect(url_for('login.user_login'))
+        return redirect(url_for('login.login'))
     
     return render_template('auth/register.html', form=form)
         

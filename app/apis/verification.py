@@ -24,6 +24,13 @@ def send_verification_code():
         
     email = data['email']
     
+    '''check if valid verification code exist'''
+    if VerificationService.get_code(email) is not None:
+        return jsonify({
+            'status': 'error',
+            'message': '5 分钟内不允许重复发送验证码！'
+        })
+    
     code = VerificationService.generate_code()
     try:
         VerificationService.save_code(email, code)
@@ -59,23 +66,4 @@ def verify_verification_code():
         'status': 'success' if is_valid else 'error',
         'is_valid': is_valid,
         'message': message
-    })
-
-@verification_bp.route('/find-code', methods=['POST'])
-def find_verification_code():
-    data = request.get_json()
-    
-    if not data or 'email' not in data:
-        return jsonify({
-            'status': 'error',
-            'message': 'arg:email not found'
-        })
-    
-    email = data['email']
-    exists = VerificationService.get_code(email) is not None
-    
-    return jsonify({
-        'status': 'success',
-        'exists': exists,
-        'message': 'verification code exists' if exists else 'verification code not exists'
     })
