@@ -4,7 +4,7 @@ from app.config import config
 from app.const import bp_list
 from sqlalchemy import text
 from app.extensions import *
-
+import os
 
 def create_app(config_name='default'):
     ''' Factory function to create the Flask app '''
@@ -43,6 +43,8 @@ def create_app(config_name='default'):
         
         app.register_blueprint(blueprint, url_prefix=url_prefix)
         
+    '''uploads avatar config'''
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], app.config['AVATAR_FOLDER']), exist_ok=True)
         
     '''mysql health check'''
     @app.route('/test/mysql')

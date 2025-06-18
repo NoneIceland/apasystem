@@ -43,6 +43,8 @@ def register():
             role='user'
         )
         
+        user_info = new_user.create_info()
+        
         db.session.add(new_user)
         db.session.commit()
         flash('注册成功！您现在可以登录', 'success')

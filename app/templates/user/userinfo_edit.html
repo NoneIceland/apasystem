@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}修改个人信息 - 社团管理系统{% endblock %}
+
+{% block head %}
+    <!-- 添加日期选择器样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- 添加自定义预览样式 -->
+    <style>
+        .avatar-preview {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e5e7eb;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="border-b border-gray-200 pb-4">
+        <h1 class="text-2xl font-bold text-gray-800">个人信息设置</h1>
+        <p class="text-gray-600 mt-1">更新您的个人资料信息和账户设置</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-6 space-y-8">
+        {{ form.hidden_tag() }}
+        
+        <!-- 基本信息部分 -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-semibold text-gray-700">基本信息</h2>
+            
+            <!-- 头像上传区域 -->
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <!-- 预览容器 - 优先显示预览 -->
+                    <div id="avatar-container">
+                        {% if current_user.info and current_user.info.avatar %}
+                            <!-- 如果已有头像 -->
+                            
+                        {% else %}
+                            <!-- 默认占位符 -->
+                            <div id="avatar-placeholder" class="bg-gray-200 border-2 border-dashed rounded-full w-24 h-24 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- 上传按钮 -->
+                    <label for="avatar-upload" class="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input id="avatar-upload" type="file" name="avatar" class="hidden" accept="image/*">
+                    </label>
+                </div>
+                
+                <div>
+                    <p class="text-sm text-gray-500">支持JPG、PNG格式，最大2MB</p>
+                </div>
+            </div>
+            
+            <!-- 用户名和昵称 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+                        用户名
+                    </label>
+                    {{ form.username(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500", readonly=true) }}
+                    <p class="mt-1 text-sm text-gray-500">用户名不可更改</p>
+                </div>
+                
+                <div>
+                    <label for="nickname" class="block text-sm font-medium text-gray-700 mb-1">
+                        昵称
+                    </label>
+                    {{ form.nickname(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-5 00 focus:border-blue-500") }}
+                    {% if form.nickname.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.nickname.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- 邮箱和手机号 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                        电子邮箱
+                    </label>
+                    {{ form.email(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500") }}
+                    {% if form.email.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.email.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                        手机号码
+                    </label>
+                    {{ form.phone(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500") }}
+                    {% if form.phone.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.phone.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- 详细信息部分 -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-semibold text-gray-700">详细信息</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="school_id" class="block text-sm font-medium text-gray-700 mb-1">
+                        学号
+                    </label>
+                    {{ form.school_id(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500") }}
+                </div>
+                
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">
+                        性别
+                    </label>
+                    {{ form.gender(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500") }}
+                </div>
+            </div>
+            
+            <div>
+                <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">
+                    生日
+                </label>
+                {{ form.birthday(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 date-picker") }}
+            </div>
+            
+            <div>
+                <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">
+                    个人简介
+                </label>
+                {{ form.bio(class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 min-h-[100px]", placeholder="简单介绍一下自己...") }}
+            </div>
+        </div>
+        
+        <!-- 表单提交按钮 -->
+        <div class="pt-6 border-t border-gray-200 flex justify-end space-x-3">
+            <button type="button" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
+                取消
+            </button>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                保存更改
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- 日期选择器脚本 -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化日期选择器
+        flatpickr('.date-picker', {
+            dateFormat: "Y-m-d",
+            locale: "zh",
+            allowInput: true
+        });
+        
+        // 头像预览功能 - 改进版本
+        const avatarInput = document.getElementById('avatar-upload');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    
+                    // 验证文件类型
+                    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('请上传JPG或PNG格式的图片');
+                        return;
+                    }
+                    
+                    // 验证文件大小 (2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('图片大小不能超过2MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        // 获取预览容器
+                        const container = document.getElementById('avatar-container');
+                        
+                        // 创建或更新预览图片
+                        let previewImg = document.getElementById('avatar-preview');
+                        
+                        if (!previewImg) {
+                            // 创建新图片元素
+                            previewImg = document.createElement('img');
+                            previewImg.id = 'avatar-preview';
+                            previewImg.className = 'avatar-preview';
+                            previewImg.alt = '头像预览';
+                            
+                            // 移除占位符
+                            const placeholder = document.getElementById('avatar-placeholder');
+                            if (placeholder) placeholder.remove();
+                            
+                            // 添加到容器
+                            container.appendChild(previewImg);
+                        }
+                        
+                        // 更新图片源
+                        previewImg.src = event.target.result;
+                    };
+                    
+                    // 读取文件内容
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

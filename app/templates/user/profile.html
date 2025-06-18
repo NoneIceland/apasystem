@@ -109,7 +109,7 @@
                     <div class="flex flex-col items-center">
                         <div class="relative">
                             <div class="profile-avatar bg-blue-100 rounded-full flex items-center justify-center">
-                                <span class="text-4xl font-bold text-blue-800">张</span>
+                                <span class="text-4xl font-bold text-blue-800">{{ current_user.nickname[0] }}</span>
                             </div>
                             <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
@@ -117,21 +117,21 @@
                                 </svg>
                             </div>
                         </div>
-                        <h2 class="mt-4 text-2xl font-bold text-gray-800">张明</h2>
-                        <p class="text-gray-600">社团管理员</p>
+                        <h2 class="mt-4 text-2xl font-bold text-gray-800">{{ current_user.nickname }}</h2>
+                        <p class="text-gray-600">{{ current_user.role }}</p>
                         
                         <div class="w-full mt-6 bg-white rounded-xl p-4">
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-gray-500">邮箱</span>
-                                <span class="font-medium">zhangming@example.com</span>
+                                <span class="font-medium">{{ current_user.email }}</span>
                             </div>
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-gray-500">手机</span>
-                                <span class="font-medium">138****5678</span>
+                                <span class="font-medium">{{ current_user.phone }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-500">加入时间</span>
-                                <span class="font-medium">2022-03-15</span>
+                                <span class="text-gray-500">年级</span>
+                                <span class="font-medium">{{ current_user.level }}</span>
                             </div>
                         </div>
                         
@@ -293,7 +293,7 @@
 
     <!-- 设置标签内容（默认隐藏） -->
     <div id="settings-content" class="tab-content py-6 hidden">
-        <!-- 内容待实现 -->
+        
     </div>
 </div>
 

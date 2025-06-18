@@ -39,6 +39,12 @@ class DevelopmentConfig(Config):
     MAIL_DEFAULT_SENDER = "icemail2025@163.com"
     INTERNAL_IP = "localhost"
     
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+    AVATAR_FOLDER = 'avatars'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+    
 class ProductionConfig(Config):
     ''' production config '''
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}'.format(
