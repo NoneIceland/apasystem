@@ -37,6 +37,7 @@ def register():
         '''create new user'''
         new_user = User(
             username=form.username.data,
+            nickname=form.nickname.data,
             password=form.password.data,
             email=email,
             role='user'
