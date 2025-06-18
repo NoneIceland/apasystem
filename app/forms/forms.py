@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
+from app.utils.validator import alphanumeric_only
 
 class LoginForm(FlaskForm):
     username = StringField('用户名', validators=[
@@ -20,7 +21,12 @@ class RegistrationForm(FlaskForm):
     ])
     username = StringField('用户名', validators=[
         DataRequired(message='用户名不能为空'),
-        Length(min=3, max=64, message='用户名应在3-64个字符之间')
+        Length(min=3, max=64, message='用户名应在3-64个字符之间'),
+        alphanumeric_only
+    ])
+    nickname = StringField('昵称', validators=[
+        DataRequired(message='昵称不能为空'),
+        Length(min=1, max=16, message='昵称应在1-16个字符之间')
     ])
     email = StringField('邮箱', validators=[
         DataRequired(message='邮箱不能为空'),

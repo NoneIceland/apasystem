@@ -4,6 +4,7 @@ from app.models import User
 from app.extensions import db
 from app.apis.verification import *
 from app.services.verification import VerificationService
+import re
 
 register_bp = Blueprint('register', __name__)
 
@@ -30,6 +31,8 @@ def register():
         if User.query.filter_by(email=form.email.data).first():
             form.email.errors.append('该邮箱已被注册，请使用其他邮箱')
             return render_template('auth/register.html', form=form)
+        
+        '''check if username valid'''
         
         '''create new user'''
         new_user = User(

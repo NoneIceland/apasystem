@@ -6,13 +6,14 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
+    nickname = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(255))
     role = db.Column(db.String(32), default='user')
-    is_verified = db.Column(db.Boolean, default=False)
     
-    def __init__(self, username, email, password, role='user'):
+    def __init__(self, username, nickname, email, password, role='user'):
         self.username = username
+        self.nickname = nickname
         self.email = email
         self.set_password(password)
         self.role = role
@@ -22,14 +23,3 @@ class User(UserMixin, db.Model):
         
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
-    @staticmethod
-    def create_user(username, password):
-        '''create user helper'''
-        if User.query.filter_by(username=username).first():
-            return None
-        
-        new_user = User(username=username, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-        return new_user

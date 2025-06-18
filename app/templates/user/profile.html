@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block title %}个人中心{% endblock %}
+
+{% block head %}
+    <!-- 自定义个人中心页面样式 -->
+    <style>
+        .profile-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-card {
+            background-color: white;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+        
+        .stats-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+        }
+        
+        .activity-table thead {
+            background-color: #f8fafc;
+        }
+        
+        .activity-table tbody tr {
+            transition: background-color 0.2s;
+        }
+        
+        .activity-table tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .edit-button {
+            transition: all 0.3s ease;
+        }
+        
+        .edit-button:hover {
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .tab-item {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-item.active {
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .notification-item {
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8fafc;
+            border-left-color: #2563eb;
+        }
+        
+        .notification-unread {
+            background-color: #eff6ff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- 页面标题 -->
+    <div class="pb-5 border-b border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-900">个人中心</h1>
+        <p class="mt-2 text-gray-600">管理您的个人信息、活动参与和通知</p>
+    </div>
+
+    <!-- 标签导航 -->
+    <div class="mt-8 flex overflow-x-auto space-x-1 border-b">
+        <div class="tab-item active" data-tab="overview">概览</div>
+        <div class="tab-item" data-tab="activities">我的活动</div>
+        <div class="tab-item" data-tab="notifications">通知</div>
+        <div class="tab-item" data-tab="settings">设置</div>
+    </div>
+
+    <!-- 概览标签内容 -->
+    <div id="overview-content" class="tab-content py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左侧：个人信息卡片 -->
+            <div class="lg:col-span-1">
+                <div class="profile-card p-6">
+                    <div class="flex flex-col items-center">
+                        <div class="relative">
+                            <div class="profile-avatar bg-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-4xl font-bold text-blue-800">张</span>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h2 class="mt-4 text-2xl font-bold text-gray-800">张明</h2>
+                        <p class="text-gray-600">社团管理员</p>
+                        
+                        <div class="w-full mt-6 bg-white rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-gray-500">邮箱</span>
+                                <span class="font-medium">zhangming@example.com</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-gray-500">手机</span>
+                                <span class="font-medium">138****5678</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">加入时间</span>
+                                <span class="font-medium">2022-03-15</span>
+                            </div>
+                        </div>
+                        
+                        <button class="edit-button mt-6 w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                            编辑个人信息
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 统计数据卡片 -->
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <div class="stats-card p-5 border-l-blue-500">
+                        <div class="text-gray-500">参与活动</div>
+                        <div class="text-2xl font-bold mt-2">24</div>
+                        <div class="text-sm text-green-500 mt-1">
+                            <span>▲</span> 本月新增 3
+                        </div>
+                    </div>
+                    <div class="stats-card p-5 border-l-purple-500">
+                        <div class="text-gray-500">发布博客</div>
+                        <div class="text-2xl font-bold mt-2">16</div>
+                        <div class="text-sm text-green-500 mt-1">
+                            <span>▲</span> 本月新增 2
+                        </div>
+                    </div>
+                    <div class="stats-card p-5 border-l-amber-500">
+                        <div class="text-gray-500">社团积分</div>
+                        <div class="text-2xl font-bold mt-2">1,850</div>
+                        <div class="text-sm text-gray-500 mt-1">当前等级: 黄金会员</div>
+                    </div>
+                    <div class="stats-card p-5 border-l-green-500">
+                        <div class="text-gray-500">连续签到</div>
+                        <div class="text-2xl font-bold mt-2">28</div>
+                        <div class="text-sm text-gray-500 mt-1">天</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：近期活动 -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">近期活动</h3>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 flex items-center">
+                            查看全部
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full activity-table">
+                            <thead>
+                                <tr class="text-left text-gray-500 text-sm">
+                                    <th class="py-3 px-4">活动名称</th>
+                                    <th class="py-3 px-4">日期</th>
+                                    <th class="py-3 px-4">地点</th>
+                                    <th class="py-3 px-4">状态</th>
+                                    <th class="py-3 px-4">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700">
+                                <tr>
+                                    <td class="py-3 px-4 font-medium">春季摄影大赛</td>
+                                    <td class="py-3 px-4">2023-05-20</td>
+                                    <td class="py-3 px-4">校园艺术中心</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已报名</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">查看详情</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium">编程马拉松</td>
+                                    <td class="py-3 px-4">2023-05-15</td>
+                                    <td class="py-3 px-4">计算机学院实验室</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">进行中</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">继续参与</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium">环保公益活动</td>
+                                    <td class="py-3 px-4">2023-05-10</td>
+                                    <td class="py-3 px-4">城市公园</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">已完成</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">查看证书</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium">读书分享会</td>
+                                    <td class="py-3 px-4">2023-05-05</td>
+                                    <td class="py-3 px-4">图书馆会议室</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">已完成</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">活动总结</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium">篮球友谊赛</td>
+                                    <td class="py-3 px-4">2023-04-28</td>
+                                    <td class="py-3 px-4">体育馆篮球场</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">已完成</span>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-800">查看照片</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">即将到来的活动</h3>
+                        <div class="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-medium text-gray-900">社团年度大会</h4>
+                                    <p class="mt-1 text-gray-600">
+                                        <span class="font-medium">时间：</span>2023-06-10 14:00<br>
+                                        <span class="font-medium">地点：</span>学校大礼堂
+                                    </p>
+                                    <button class="mt-3 inline-flex items-center px-3 py-1 border border-blue-600 text-blue-600 rounded-full text-sm">
+                                        添加到日历
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 我的活动标签内容（默认隐藏） -->
+    <div id="activities-content" class="tab-content py-6 hidden">
+        <!-- 内容待实现 -->
+    </div>
+
+    <!-- 通知标签内容（默认隐藏） -->
+    <div id="notifications-content" class="tab-content py-6 hidden">
+        <!-- 内容待实现 -->
+    </div>
+
+    <!-- 设置标签内容（默认隐藏） -->
+    <div id="settings-content" class="tab-content py-6 hidden">
+        <!-- 内容待实现 -->
+    </div>
+</div>
+
+<script>
+    // 标签切换功能
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabItems = document.querySelectorAll('.tab-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // 更新活动标签
+                tabItems.forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 显示对应内容
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(`${tabName}-content`).classList.remove('hidden');
+            });
+        });
+        
+        // 页面加载时激活概览标签
+        document.querySelector('.tab-item[data-tab="overview"]').click();
+    });
+</script>
+{% endblock %}
